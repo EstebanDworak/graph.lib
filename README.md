@@ -1,13 +1,13 @@
-# GRAPH-LIB
+# graph.lib
 Graph library for c
 <br><br><br>
 
 ### TODO-LIST
-- [x] graph_create
-- [x] graph_destroy
-- [x] graph_addVertex
-- [x] graph_addEdge
-- [x] graph_vertexCount
-- [x] graph_edgeCount
-- [x] graph_outDegree
-- [x] graph_hasEdge
+- [ ] graph_create
+- [ ] graph_destroy
+- [ ] graph_addVertex
+- [ ] graph_addEdge
+- [ ] graph_vertexCount
+- [ ] graph_edgeCount
+- [ ] graph_outDegree
+- [ ] graph_hasEdge
