@@ -18,7 +18,7 @@ typedef void (*Print)(Type);
 //===================================================/
 Graph create_graph(Comparator, Print);									//CREATE GRAPH OBJECT
 void graph_destroy(Graph);												//CLEAR MEMORY
-bool graph_addVertex(Graph, Type);										//ADD NODE
+bool graph_addVertex(Graph, Type, bool);										//ADD NODE
 bool graph_addEdge(Graph, int, int);									//ADD EDGE
 int graph_vertexCount(Graph);											//GET NUMBER OF NODES ON GRAPH
 int graph_edgeCount(Graph);												//GET NUMBER OF EDGES ON GRAPH

@@ -23,6 +23,7 @@ struct strList{
 //Estructura VERTICES
 struct strVertex{
 	int id;
+	bool type;
 	Type data;
 	List chain;
 };
@@ -48,11 +49,23 @@ Graph create_graph(Comparator myCMP, Print myPrint)
 	return new;
 }
 
-bool graph_addVertex(Graph who, Type data)
+void print(Graph who){
+	for(int i=0; i<graph_vertexCount(who);i++){
+		printf("\n(%d - %d)", who->arr[i]->id, who->arr[i]->data);
+
+		for(int x=0; x<list_size(who->arr[i]->chain); x++){
+
+			printf(" (%d - %d)",who->arr[i]->id,list_get(who->arr[i]->chain, x) );
+		}
+	}
+}
+
+bool graph_addVertex(Graph who, Type data, bool type)
 {
 	Veretex* new = (Veretex*)malloc(sizeof(struct strVertex));
 	if(new!=NULL)
     {
+		new->type = type;
         new->data = data;
         new->id = who->vertex;
         new->chain = list_create();
@@ -179,7 +192,3 @@ unsigned long list_get(List l, int p){
 	}
 	return value;
 }
-
-
-
-

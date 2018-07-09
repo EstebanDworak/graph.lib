@@ -8,18 +8,19 @@ void printInt(Type d);
 int main()
 {
     Graph g1 = create_graph(cmpInt, printInt);
-    graph_addVertex(g1,(void*)100);
-    graph_addVertex(g1,(void*)200);
-    graph_addVertex(g1,(void*)300);
-    graph_addVertex(g1,(void*)400);
-    graph_addVertex(g1,(void*)500);
+    graph_addVertex(g1,(void*)100,0);
+    graph_addVertex(g1,(void*)200,0);
+    graph_addVertex(g1,(void*)300,0);
+    graph_addVertex(g1,(void*)400,0);
+    graph_addVertex(g1,(void*)500,0);
     printf("Vertex: %d\n",graph_vertexCount(g1));
     graph_addEdge(g1,2,0);
     graph_addEdge(g1,2,1);
+    graph_addEdge(g1,3,2);
     printf("Edge: %d\n", graph_edgeCount(g1));
     printf("NEIGHTBORS: %li\n", graph_outDegree(g1,2));
     printf("HAS EDGE: %d\n", graph_hasEdge(g1,2,1));
-
+    print(g1);
     return 0;
 }
 
