@@ -1,106 +1,181 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "graph.h"
 
+
+//Estructura NODO (Lista)
 struct strNode{
-	int id;
-	Type DATA;
-	List chain;
-} 
+	unsigned long id; //El contenido de cada NODE es un apuntador a un VERTEX
+	Veretex *ptr_ver;
+	struct strNode *next;
+	struct strNode *prior;
+};
 
 typedef struct strNode Node;
 
+//LISTA
+struct strList{
+	Node *first;
+	Node *last;
+	unsigned int size;
+};
+
+//Estructura VERTICES
+struct strVertex{
+	int id;
+	Type data;
+	List chain;
+};
+
+//GRAFO
 struct strGraph{
-	Node *arr;
+	Veretex **arr;
 	int vertex;
 	int edge;
 	Comparator cmpFunction;
-	Print myPrint;
-}
+	Print printFunction;
+};
 
-typedef struct strGraph Graph;
 
-Graph create_graph(Comparator myCMP, Print print)
+Graph create_graph(Comparator myCMP, Print myPrint)
 {
-	Graph new = (Graph)malloc(sizeof(Graph));
-	//Verificamos si se creó
-	new->arr = malloc(sizeof(Node));
+	Graph new = (Graph)malloc(sizeof(struct strGraph));
+	new->arr = malloc(sizeof(Veretex));
 	new->edge = 0;
 	new->vertex = 0;
 	new->cmpFunction = myCMP;
-	new->myPrint = print;
+	new->printFunction = myPrint;
+	return new;
 }
 
-void destroy_graph(Graph who)
+bool graph_addVertex(Graph who, Type data)
 {
-	x=0;
-	while(who->vertex != 0)
-	{
-		list_destroy(who->arr[x]->chain);
-		free(who->arr[x]);
-		x++;
-	}
-	free(who);
+	Veretex* new = (Veretex*)malloc(sizeof(struct strVertex));
+	if(new!=NULL)
+    {
+        new->data = data;
+        new->id = who->vertex;
+        new->chain = list_create();
+
+        who->arr[who->vertex] = new;
+        who->arr = realloc(who->arr, sizeof(Veretex)*(who->vertex+1));
+        who->vertex++;
+        return true;
+    }
+    else
+        return false;
 }
 
-bool add_vertex(Graph who, Type data)
-{
-	Node new = (Node)malloc(sizeof(Node));
-	new->data = data;
-	new->id = (who->vertex)+1;
-	new->chain=create_list();
-	who->arr=(Node)realloc(who->arr,sizeof(Node)*(who->vertex+1));
-	who->arr[who->vertex] = &new;
-	who->vertex++;
-}
 
-bool add_edge(Graph who, int id_source, int id_dest)
+bool  graph_addEdge(Graph who, int id_source, int id_dest)
 {
-	Node *SOURCE = (Node*)malloc(sizeof(Node));
-	Node *DEST = (Node*)malloc(sizeof(Node));
-	//Verificar si existe SOURCE Y DEST
-	SOURCE = who->arr[id_source-1];
-	DEST = who->arr[id_dest-1];
-	
-	list_add(SOURCE->chain, DEST);
-	free(SOURCE);
-	free(DEST);
+    if (who->arr[id_source]!=NULL && who->arr[id_dest]!=NULL)
+    {
+
+        Veretex *SOURCE = (Veretex*)malloc(sizeof(Veretex));
+        Veretex *DEST = (Veretex*)malloc(sizeof(Veretex));
+        SOURCE = who->arr[id_source];
+        DEST = who->arr[id_dest];
+        /* Probe los apuntadores SOURCE y DEST y si funcionan */
+        printf("VALOR EN SOURCE: %d\n", (int)SOURCE->data);
+        printf("VALOR EN DEST: %d\n", (int)DEST->data);
+        /* Entonces aqui esta el problema */
+        list_add(SOURCE->chain, DEST, id_dest);
+        who->edge++;
+        return true;
+    }
+    else
+        return false;
 }
 
 int graph_vertexCount(Graph who)
-	return who->vertex;
+{
+    return who->vertex;
+}
 
 int graph_edgeCount(Graph who)
-	return who->edge;
-
-int graph_outDegree(Graph who, int id)
 {
-	Node *SOURCE = (Node*)malloc(sizeof(Node));
-	//Verificar si existe SOURCE Y DEST
-	SOURCE = who->arr[id_source-1];
-	return size_list(SOURCE->chain);
+    return who->edge;
 }
 
-int graph_hasEdge(Graph who, int id_source, int id_sink)
-{
-	Node *SOURCE = (Node*)malloc(sizeof(Node));
+unsigned long graph_outDegree(Graph who, unsigned long id){
+    return list_size(who->arr[id]->chain);
+}
+
+bool graph_hasEdge(Graph who, unsigned long id_source, unsigned long id_sink){
+    Veretex *SOURCE = (Veretex*)malloc(sizeof(Veretex));
+    Veretex *SINK = (Veretex*)malloc(sizeof(Veretex));
+
 	//Verificar si existe SOURCE Y DEST
-	SOURCE = who->arr[id_sink-1];
-	Node *SINK = (Node*)malloc(sizeof(Node));
-	//Verificar si existe SOURCE Y DEST
-	SINK = who->arr[id_sink-1];
-	
-	Node *p=(Node*)malloc(sizeof(Node));
-	for(int x=0; x<size_list(SOURCE->chain); x++)
+	SOURCE = who->arr[id_source];
+	SINK = who->arr[id_sink];
+
+	unsigned long p;
+	for(int x=0; x<list_size(SOURCE->chain); x++)
 	{
-		p=SOURCE->chain[x];
-		if(p == SINK)
+		p=list_get(who->arr[id_source]->chain,x);
+		if(p == id_sink)
 			return true;
 	}
-	return false;
+    return false;
 }
 
-void graph_print(Graph who, Print p)
-{
-	for (int x = 0; x<who->size_vertex; x++)
-		printf("%d\n || %d", who->arr[x]->ID, who->arr[x]->data); 
+
+List list_create(){
+	List l;
+	l=(List)malloc(sizeof(struct strList));
+	l->size=0;
+	l->last=NULL;
+	l->first=NULL;
+	return l;
+}
+
+int list_size(List l){
+	if(l!=NULL)
+		return l->size;
+	else
+		return -1;
+}
+
+/* Aqui le paso el apuntador DEST a la funcion*/
+void list_add(List l, Veretex* ptr, unsigned long id){
+	if(l!=NULL){
+		Node *new = (Node*)malloc(sizeof(Node));
+		/* Aqui hay problema: Creo que no es la manera correcta de
+		pasar el apuntador y no se si es en la declaracion o ocmo paso DEST*/
+		new->id = id;
+		new->ptr_ver = ptr;
+        new->next = NULL;
+        new->prior = NULL;
+		if(l->size==0)
+		{
+			l->first=new;
+			l->last=new;
+		}
+		else{
+			l->last->next=new;
+			new->prior=l->last;
+			l->last=new;
+		}
+		l->size++;
+	}
+}
+
+
+unsigned long list_get(List l, int p){
+	unsigned long value=NULL;
+	Node *current=NULL;
+	int i=0;
+	int s=l->size;
+	if(l!=NULL){
+		if ((p>=0) && (p<s)){
+			current=l->first;
+			while(i<p){
+				current=current->next;
+				i++;
+			}
+			value=current->id;
+		}
+	}
+	return value;
 }

@@ -1,55 +1,44 @@
-#ifndef TEST_H_INCLUDED
-#define TEST_H_INCLUDED
+#ifndef GRAPH_H_INCLUDED
+#define GRAPH_H_INCLUDED
 
 typedef void* Type;
-typedef enum {false,true} boolean;
+typedef enum {false,true} bool;
+
+typedef struct strGraph *Graph;
+typedef struct strList *List;
+typedef struct strVertex Veretex;
+
+typedef int (*Comparator)(Type , Type);
+typedef void (*Print)(Type);
 
 
 
-struct strNode{
-	int id;
-	Type DATA;
-	List chain;
-};
-
-typedef struct strNode Node;
-
-struct strGraph{
-	Node *arr;
-	unsigned long vertex;
-	unsigned long edge;
-	Comparator cmpFunction;
-	Print myPrint;
-};
-
-typedef struct strGraph Graph;
+//===================================================/
+/***********************GRAPH************************/
+//===================================================/
+Graph create_graph(Comparator, Print);									//CREATE GRAPH OBJECT
+void graph_destroy(Graph);												//CLEAR MEMORY
+bool graph_addVertex(Graph, Type);										//ADD NODE
+bool graph_addEdge(Graph, int, int);									//ADD EDGE
+int graph_vertexCount(Graph);											//GET NUMBER OF NODES ON GRAPH
+int graph_edgeCount(Graph);												//GET NUMBER OF EDGES ON GRAPH
+unsigned long graph_outDegree(Graph, unsigned long);					//GET NUMBER OF NEIGHTBORS FROM NODE
+bool graph_hasEdge(Graph, unsigned long, unsigned long);				//CHEK IF NODES ARE LINKED
 
 
 
-//CREATE GRAPH OBJECT
-Graph graph_create(CMP, PRINT);
 
-//CLEAR MEMORY
-void graph_destroy(Graph);
-
-//ADD NODE
-boolean graph_addVertex(Graph, Type);
-
-//ADD EDGE
-boolean graph_addEdge(Graph, unsigned long, unsigned long);
-
-//GET NUMBER OF NODES ON GRAPH
-unsigned long graph_vertexCount(Graph);
-
-//GET NUMBER OF EDGES ON GRAPH 
-unsigned long graph_edgeCount(Graph);
-
-//GET NUMBER OF NEIGHTBORS FROM NODE 
-unsigned long graph_outDegree(Graph, unsigned long);
-
-//CHEK IF NODES ARE LINKED
-boolean graph_hasEdge(Graph, unsigned long, unsigned long);
+//===================================================/
+/************************LIST************************/
+//===================================================/
+List list_create();														//RETURNS A NEW LIST CONTAINER
+void list_destroy(List);												//CLEAR MEMORY
+int list_size(List);													//RETURN LIST SIZE
+void list_add(List ,Veretex*, unsigned long);							//ADD ELEMENT TO EXISTING LIST
+unsigned long list_get(List, int);										//RETURNS NODE ID OF INDEX
+void list_set(List, Type, int);											//
+Type list_remove(List, int);											//REMOVE ELEMENT FROM LIST
 
 
 
-#endif
+#endif // GRAPH_H_INCLUDED
