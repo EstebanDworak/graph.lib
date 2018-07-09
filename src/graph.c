@@ -33,7 +33,6 @@ typedef struct info Content;
 struct strVertex{
 	int id;
 	bool type;
-	//Type data;
 	Content data;
 	List chain;
 };
@@ -60,17 +59,17 @@ Graph create_graph(Comparator myCMP, Print myPrint)
 }
 
 void print(Graph who){
-	for(int i=0; i<graph_vertexCount(who);i++){
+	for(int i=0; i<102;i++){
 		printf("\n(%d - %s)", who->arr[i]->id, who->arr[i]->data.name);
 
 		for(int x=0; x<list_size(who->arr[i]->chain); x++){
 
-			printf(" (ID:%d - ID:%s)",who->arr[i]->id, who->arr[list_get(who->arr[i]->chain, x)]->data.name);
+			printf("\n\tMOVIE: %s", who->arr[list_get(who->arr[i]->chain, x)]->data.name);
 		}
 	}
 }
 
-bool graph_addVertex(Graph who, Type data, bool type, char *name, char *number, char *extra)
+bool graph_addVertex(Graph who, bool type, char *name, char *number, char *extra)
 {
 	Vertex* new = (Vertex*)malloc(sizeof(struct strVertex));
 	if(new!=NULL)
@@ -83,8 +82,8 @@ bool graph_addVertex(Graph who, Type data, bool type, char *name, char *number, 
         new->data.extra = malloc(sizeof(char)*1024);
         strcpy(new->data.extra, extra);
         new->id = who->vertex;
-        new->chain = list_create();
 
+        new->chain = list_create();
         who->arr[who->vertex] = new;
         who->arr = realloc(who->arr, sizeof(Vertex)*(who->vertex+1));
         who->vertex++;
@@ -95,8 +94,26 @@ bool graph_addVertex(Graph who, Type data, bool type, char *name, char *number, 
 }
 
 
-bool  graph_addEdge(Graph who, int id_source, int id_dest)
+bool  graph_addEdge(Graph who, char *source, char *dest)
 {
+    int id_source, id_dest;
+    for (int i=0; i<who->vertex; i++)
+    {
+        if (strcmp(who->arr[i]->data.name, source)==0)
+        {
+            id_source = i;
+            break;
+        }
+    }
+    for (int i=0; i<who->vertex; i++)
+    {
+        if (strcmp(who->arr[i]->data.name, dest)==0)
+        {
+            id_dest = i;
+            break;
+        }
+    }
+
     if (who->arr[id_source]!=NULL && who->arr[id_dest]!=NULL)
     {
 
@@ -104,10 +121,8 @@ bool  graph_addEdge(Graph who, int id_source, int id_dest)
         Vertex *DEST = (Vertex*)malloc(sizeof(Vertex));
         SOURCE = who->arr[id_source];
         DEST = who->arr[id_dest];
-        /* Probe los apuntadores SOURCE y DEST y si funcionan */
-        printf("VALOR EN SOURCE: %s\n", SOURCE->data.name);
-        printf("VALOR EN DEST: %s\n", DEST->data.name);
-        /* Entonces aqui esta el problema */
+        /*printf("VALOR EN SOURCE: %s\n", SOURCE->data.name);
+        printf("VALOR EN DEST: %s\n", DEST->data.name);*/
         list_add(SOURCE->chain, DEST, id_dest);
         who->edge++;
         return true;
