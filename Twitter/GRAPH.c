@@ -51,14 +51,17 @@ Graph create_graph(Comparator myCMP, Print myPrint)
 	return new;
 }
 
+
 void print(Graph who, long long var){
 	for(int i=var; i<who->vertex;i++){
 		printf("\n(%d - %s)", who->arr[i]->id, who->arr[i]->data);
+		printf(" : %d",list_size(who->arr[i]->chain));
+		//printf("\n\tRe-Tweet: %s", who->arr[list_get(who->arr[i]->chain, x)]->data);
 
-		for(int x=0; x<list_size(who->arr[i]->chain); x++){
+		/*for(int x=0; x<list_size(who->arr[i]->chain); x++){
 
 			printf("\n\tRe-Tweet: %s", who->arr[list_get(who->arr[i]->chain, x)]->data);
-		}
+		}*/
 	}
 }
 

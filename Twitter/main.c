@@ -3,7 +3,7 @@
 #include <string.h>
 #include "graph.h"
 
-#define M 10000
+#define M 20
 long long var =0;
 int cmpInt(Type d1, Type d2);
 void printInt(Type d);
@@ -24,7 +24,7 @@ const char* getfield(char* line, int num)
 int main()
 {
     Graph g1 = create_graph(cmpInt, printInt);
-    FILE* stream = fopen("prueba.csv", "r");
+    FILE* stream = fopen("C:\\temp\\eclipse-workspace\\popo\\src\\RETWEETS.csv", "r");
     if(stream==NULL)
         printf("ERROR\n");
 
@@ -43,8 +43,8 @@ int main()
     var = graph_vertexCount(g1);
     fclose(stream);
 
-
-    stream = fopen("prueba.csv", "r");
+    printf("DONE11\n");
+    stream = fopen("C:\\temp\\eclipse-workspace\\popo\\src\\RETWEETS.csv", "r");
     if(stream==NULL)
         printf("ERROR\n");
 
@@ -66,9 +66,10 @@ int main()
 
 
 
+    printf("DONE2\n");
 
     char *src, *dst;
-    stream = fopen("prueba.csv", "r");
+    stream = fopen("C:\\temp\\eclipse-workspace\\popo\\src\\RETWEETS.csv", "r");
     if(stream==NULL)
         printf("ERROR\n");
 
@@ -88,6 +89,7 @@ int main()
     }
     fclose(stream);
     print(g1,var);
+    getch();
 }
 
 /*TODAVIA NO USO ESTAS FUNCIONES,  SOLO LO DECLARÉ AQUI POR EL MOMENTO*/
